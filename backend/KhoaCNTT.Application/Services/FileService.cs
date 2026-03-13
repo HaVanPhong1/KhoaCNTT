@@ -262,6 +262,7 @@ namespace KhoaCNTT.Application.Services
             file.Title = request.Title;
             file.SubjectCode = request.SubjectCode;
             file.Permission = request.Permission;
+            file.FileType = request.FileType;
             await _fileRepo.UpdateAsync(file);
         }
 
@@ -294,7 +295,7 @@ namespace KhoaCNTT.Application.Services
             return admin.Id;
         }
 
-        private async Task checkSubjectCode(string subjectCode)
+        private async Task checkSubjectCode(string? subjectCode)
         {
             if (subjectCode == null) return;
             var subject = await _subjectRepo.GetByCodeAsync(subjectCode);

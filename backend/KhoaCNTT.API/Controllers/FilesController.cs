@@ -59,7 +59,7 @@ namespace KhoaCNTT.API.Controllers
 
 
         // Lấy danh sách file đang chờ duyệt
-        [HttpGet("pending")]
+        [HttpGet("requests/pending")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPendingList()
         {
@@ -82,7 +82,7 @@ namespace KhoaCNTT.API.Controllers
         }
 
         // Duyệt file
-        [HttpPut("request/{id}/approve")]
+        [HttpPut("requests/{id}/approve")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Approve(int id, [FromBody] ApproveRequest req)
         {
@@ -132,15 +132,15 @@ namespace KhoaCNTT.API.Controllers
         }
 
         // --- CÁC API THỐNG KÊ (STATS) ---
-        [HttpGet("stats/file/type")]
+        [HttpGet("stats/type")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStatsByFileType() => Ok(await _fileService.GetStatsByFileTypeAsync());
 
-        [HttpGet("stats/file/subject")]
+        [HttpGet("stats/subject")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStatsBySubject() => Ok(await _fileService.GetStatsBySubjectAsync());
 
-        [HttpGet("stats/file/traffic")]
+        [HttpGet("stats/traffic")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStatsByTraffic() => Ok(await _fileService.GetStatsByTrafficAsync());
     

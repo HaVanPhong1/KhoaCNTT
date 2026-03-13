@@ -36,8 +36,8 @@ namespace KhoaCNTT.API.Controllers
             }
         }
 
-        [HttpGet("schedule")]
-        public async Task<IActionResult> GetSchedule(string semesterId)
+        [HttpGet("schedule/{id}")]
+        public async Task<IActionResult> GetSchedule(string id)
         {
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             if (string.IsNullOrEmpty(token))
@@ -46,7 +46,7 @@ namespace KhoaCNTT.API.Controllers
             }
             try
             {
-                var data = await _schoolApi.GetScheduleAsync(token, semesterId);
+                var data = await _schoolApi.GetScheduleAsync(token, id);
                 return Ok(data);
             }
             catch (Exception ex)
@@ -54,5 +54,8 @@ namespace KhoaCNTT.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // get semester Id from school API
+
     }
 }
