@@ -23,8 +23,8 @@ namespace KhoaCNTT.API.Controllers
         {
             try
             {
-                var token = await _authService.LoginAdminAsync(request.Username, request.Password);
-                return Ok(new { Token = token, Role = "Admin", Username = request.Username });
+                var result = await _authService.LoginAdminAsync(request.Username, request.Password);
+                return Ok(new { Token = result.Token, Role = result.Role, Username = request.Username });
             }
             catch (Exception ex)
             {

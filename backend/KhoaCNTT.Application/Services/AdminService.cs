@@ -72,6 +72,11 @@ namespace KhoaCNTT.Application.Services
             var admin = await _repo.GetByIdAsync(id);
             if (admin == null) throw new NotFoundException("Admin", id);
 
+            if (string.IsNullOrWhiteSpace(request.FullName) && string.IsNullOrWhiteSpace(request.FullName))
+            {
+                throw new BusinessRuleException("Tên người dùng không được để trống.");
+            }
+
             if (admin.Level == 1)
             {
                 throw new BusinessRuleException("Không thể chỉnh sửa thông tin của Super Admin.");

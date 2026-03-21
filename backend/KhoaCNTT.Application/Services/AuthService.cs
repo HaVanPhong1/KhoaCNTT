@@ -3,6 +3,7 @@ using KhoaCNTT.Application.Interfaces.Repositories;
 using KhoaCNTT.Application.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
 using KhoaCNTT.Application.Common.Utils;
+using KhoaCNTT.Application.Common.Constants;
 
 namespace KhoaCNTT.Application.Services
 {
@@ -23,7 +24,7 @@ namespace KhoaCNTT.Application.Services
             _hasher = hasher;
         }
 
-        public async Task<string> LoginAdminAsync(string username, string password)
+        public async Task<(string Token, string Role)> LoginAdminAsync(string username, string password)
         {
             // ƯU TIÊN: Check trong AppSettings (Test Admin)
             var testAdminUser = _config["TestAdmin:Username"];
@@ -32,7 +33,8 @@ namespace KhoaCNTT.Application.Services
             if (!string.IsNullOrEmpty(testAdminUser) && username == testAdminUser && password == testAdminPass)
             {
                 // quyền admin level 1
-                return _jwtGenerator.GenerateAdminToken(username, 1);
+                return (_jwtGenerator.GenerateAdminToken(username, 1),
+                    RoleConstant.AdminLevel1);
             }
 
             // Check trong database
@@ -52,11 +54,19 @@ namespace KhoaCNTT.Application.Services
                 }
             }
 
+            var role = adminInDb.Level switch
+            {
+                1 => RoleConstant.AdminLevel1,
+                2 => RoleConstant.AdminLevel2,
+                3 => RoleConstant.AdminLevel3,
+            };
+
             if (!isVerified)
             {
                 throw new Exception("Sai tên đăng nhập hoặc mật khẩu.");
             } else {
-                return _jwtGenerator.GenerateAdminToken(adminInDb.Username, adminInDb.Level);
+                return (_jwtGenerator.GenerateAdminToken(adminInDb.Username, adminInDb.Level),
+                    role);
             }
         }
 

@@ -7,15 +7,20 @@ function AdminLayout() {
 	const location = useLocation()
 	const navigate = useNavigate()
 	const username = localStorage.getItem('username')
+	const role = localStorage.getItem('role')
 
 	const [canViewAccounts, setCanViewAccounts] = useState(true)
 
 	// Redirect nếu vào /admin
 	useEffect(() => {
 		if (location.pathname === '/admin') {
-			navigate('/admin/accounts')
+			if (role === 'Admin1') {
+				navigate('/admin/accounts')
+			} else {
+				navigate('/admin/lecturers')
+			}
 		}
-	}, [location.pathname, navigate])
+	}, [location.pathname, role, navigate])
 
 	// Check quyền xem accounts
 	useEffect(() => {
