@@ -7,22 +7,25 @@ function AdminLayout() {
 	const location = useLocation()
 	const navigate = useNavigate()
 	const username = localStorage.getItem('username')
-	const role = localStorage.getItem('role')
-
-	const [canViewAccounts, setCanViewAccounts] = useState(true)
+	// const role = localStorage.getItem('role')
+	const [canViewAccounts, setCanViewAccounts] = useState(null)
 
 	// Redirect nếu vào /admin
 	useEffect(() => {
-		if (location.pathname === '/admin') {
-			if (role === 'Admin1') {
-				navigate('/admin/accounts')
-			} else {
-				navigate('/admin/lecturers')
+		// nếu không có quyền accounts
+		if (!canViewAccounts) {
+			// đang ở accounts → đá sang lecturers
+			if (location.pathname === '/admin/accounts') {
+				navigate('/admin/lecturers', { replace: true })
+			}
+
+			// vừa vào /admin → cũng đá sang lecturers
+			if (location.pathname === '/admin') {
+				navigate('/admin/lecturers', { replace: true })
 			}
 		}
-	}, [location.pathname, role, navigate])
+	}, [canViewAccounts, location.pathname])
 
-	// Check quyền xem accounts
 	useEffect(() => {
 		const checkAccounts = async () => {
 			try {
@@ -32,7 +35,6 @@ function AdminLayout() {
 				setCanViewAccounts(false)
 			}
 		}
-
 		checkAccounts()
 	}, [])
 
@@ -47,32 +49,34 @@ function AdminLayout() {
 				</div>
 
 				<nav className='flex-1 px-2 py-4 space-y-1'>
-					{menu
-						.filter((item) => {
-							// Ẩn menu accounts nếu không có quyền
-							if (
-								item.path === '/admin/accounts' &&
-								!canViewAccounts
-							) {
-								return false
-							}
-							return true
-						})
-						.map((item) => {
-							const Icon = item.icon
-							const active = location.pathname === item.path
+					{canViewAccounts === null
+						? null
+						: menu
+								.filter((item) => {
+									if (
+										item.path === '/admin/accounts' &&
+										!canViewAccounts
+									) {
+										return false
+									}
+									return true
+								})
+								.map((item) => {
+									const Icon = item.icon
+									const active =
+										location.pathname === item.path
 
-							return (
-								<Link
-									key={item.path}
-									to={item.path}
-									className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+									return (
+										<Link
+											key={item.path}
+											to={item.path}
+											className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
 										${active ? 'bg-blue-800' : 'hover:bg-blue-900'}`}>
-									{Icon && <Icon size={18} />}
-									{item.name}
-								</Link>
-							)
-						})}
+											{Icon && <Icon size={18} />}
+											{item.name}
+										</Link>
+									)
+								})}
 				</nav>
 			</aside>
 

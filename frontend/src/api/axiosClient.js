@@ -34,9 +34,10 @@ axiosClient.interceptors.response.use(
 					localStorage.removeItem('username')
 					// window.location.href = '/login'
 				}
-			} else if (error.response.status === 403) {
-				alert('Bạn không có quyền thực hiện hành động này!')
 			}
+			//  else if (error.response.status === 403) {
+			// 	alert('Bạn không có quyền thực hiện hành động này!')
+			// }
 		}
 		return Promise.reject(error)
 	}

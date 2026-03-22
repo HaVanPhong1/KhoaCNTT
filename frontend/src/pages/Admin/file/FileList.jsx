@@ -234,9 +234,12 @@ function FileList() {
 								replaceFile.permission
 							)
 							const file = formData.get('file')
-
+							if (!file) {
+								setPopup('Vui lòng chọn file.')
+								return
+							}
 							const error = checkSize(file, '250MB')
-							if (error) {
+							if (!error) {
 								setPopup(
 									'Tài liệu tải lên không được nặng hơn 250MB.'
 								)

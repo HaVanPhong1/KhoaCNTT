@@ -4,6 +4,7 @@ import FileRequests from './FileRequests'
 
 function ManageFiles() {
 	const [tab, setTab] = useState('files')
+	const role = localStorage.getItem('role')
 
 	return (
 		<div className='p-6'>
@@ -23,7 +24,7 @@ function ManageFiles() {
 
 			{tab === 'files' && <FileList />}
 
-			{tab === 'requests' && <FileRequests />}
+			{tab === 'requests' && role !== 'Admin3' && <FileRequests />}
 		</div>
 	)
 }
