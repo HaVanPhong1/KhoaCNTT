@@ -4,6 +4,7 @@ import studentApi from '../../../api/studentApi'
 import DataTable from '../../../components/table/DataTable'
 import IconButton from '../../../components/parts/IconButton'
 import FormModal from '../../../components/modal/FormModal'
+import ConfirmModal from '../../../components/modal/ConfirmModal'
 import FilterForm from '../../../components/parts/FilterForm'
 import Pagination from '../../../components/table/Pagination'
 import PopupMessage from '../../../components/parts/PopupMessage'
@@ -14,7 +15,7 @@ import {
 	editMetadataFields,
 	getSearchConfig
 } from '../../../constants/file'
-import { checkSize } from '../../../helpers/fileHelpers'
+import { checkSize, handleDownload } from '../../../helpers/fileHelpers'
 import { Replace, Download, Trash2, Pencil } from 'lucide-react'
 
 function FileList() {
@@ -123,7 +124,7 @@ function FileList() {
 						<IconButton
 							icon={Download}
 							color='green'
-							onClick={() => fileApi.download(row.id)}
+							onClick={() => handleDownload(row.id, row.title, setPopup)}
 						/>
 						<IconButton
 							icon={Trash2}
@@ -292,6 +293,7 @@ function FileList() {
 					}}
 					onClose={() => setWarning(null)}
 					confirmText='Xác nhận'
+					color='red'
 				/>
 			)}
 		</div>
